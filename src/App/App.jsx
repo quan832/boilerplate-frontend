@@ -1,34 +1,15 @@
 // import './App.scss';
-import { createBrowserHistory } from 'history';
 import { Router, Route, Switch, Redirect } from "react-router-dom";
+import HomePage from 'pages/HomePage'
+import 'assets/scss/App.scss'
+import history from "helper/history";
+import HomeTemplate from "template/HomeTemplate";
+import { routes } from "routes/routes";
 
-// // styled
-// import 'antd/dist/antd.css';
-// import { routes } from 'routes/routes.js';
+// styled
+import 'antd/dist/antd.css';
 
-// import PrivateTemplate from 'template/Private/PrivateTemplate.jsx';
-// import LoginTemplate from 'template/Login/LoginTemplate.jsx';
-// import AdminTemplate from 'template/Admin/AdminTemplate.jsx';
-
-// export const history = createBrowserHistory();
-
-// const Components = [
-//   {
-//     Component: PrivateTemplate,
-//     routes: routes.routesHome
-//   },
-//   {
-//     Component: LoginTemplate,
-//     routes: routes.routesAuth
-//   },
-//   {
-//     Component: AdminTemplate,
-//     routes: routes.routesAdmin
-//   }
-// ];
-
-export const history = createBrowserHistory();
-
+const Components = [{ Component: HomeTemplate, routes: routes.routesHome }];
 
 const renderRoute = (Component, routes) => {
   if (routes && routes.length > 0) {
@@ -50,14 +31,9 @@ function App() {
     <Router history={history}>
       {/* public Route */}
       <Switch>
-        {/* {Components.map((item) => {
+        {Components.map((item) => {
           return renderRoute(item.Component, item.routes);
-        })} */}
-        <Route
-          exact
-          path="/"
-          component={() => <>123</>}
-        />
+        })}
       </Switch>
     </Router>
   );

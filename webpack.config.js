@@ -101,6 +101,8 @@ module.exports = (env, agrv) => {
         apis: path.resolve(__dirname, './src/apis/'),
         utils: path.resolve(__dirname, './src/utils/'),
         pages: path.resolve(__dirname, './src/pages/'),
+        helper: path.resolve(__dirname, './src/helper'),
+        hooks: path.resolve(__dirname, './src/hooks'),
         template: path.resolve(__dirname, './src/template/')
       }
     },

@@ -1,5 +1,5 @@
 const initialState = {
-  closeSideNav: false
+  loading: false
 };
 
 const AppReducer = (state = initialState, action) => {
