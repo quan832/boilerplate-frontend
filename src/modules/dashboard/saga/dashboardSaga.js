@@ -1,6 +1,6 @@
-import DashboardAction, { DOING_STEP_ONE, FETCH_WHEN_CHANGE_PAGE, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
+import DashboardAction, { DELETE_ROW_STAFF, DOING_STEP_ONE, FETCH_WHEN_CHANGE_PAGE, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
 import { all, call, fork, put, select, takeLatest } from '@redux-saga/core/effects';
-import { errorNotification, getError } from 'helper/notification';
+import { errorNotification, getError, successNotification } from 'helper/notification';
 import { doingProcessOne } from '../api/dashboard';
 import moment from 'moment'
 import { FORMAT_DATE } from 'helper/constant';
@@ -8,15 +8,20 @@ import { FORMAT_DATE } from 'helper/constant';
 export const getCurrentStep = (state) => state.dashboard.currentStep;
 export const getCurrentFile = (state) => state.dashboard.stepOne.file;
 export const getParamsStepTwo = (state) => state.dashboard.stepTwo;
+export const getExceptStaff = (state) => state.dashboard.stepTwo.staffDelete;
 
 function* doingStepOne({ payload }) {
   try {
     const { file, params } = payload
+    const exceptStaff = yield select(getExceptStaff)
     yield put({ type: DashboardAction.DOING_STEP_ONE.REQUEST, payload: { file, params } });
-    const data = yield call(doingProcessOne, file, params);
+    const newParams = {
+      ...params, exceptStaff
+    }
+    const data = yield call(doingProcessOne, file, newParams);
 
     yield put({ type: DashboardAction.DOING_STEP_ONE.SUCCESS, payload: data });
-
+    successNotification('get data success');
   } catch (error) {
     errorNotification(getError(error));
     yield put({
@@ -52,6 +57,10 @@ function* watchOnChangePage() {
   yield takeLatest(FETCH_WHEN_CHANGE_PAGE, shouldFetchOnChangePage);
 }
 
+function* watchOnDeleteRow() {
+  yield takeLatest(DELETE_ROW_STAFF, shouldFetchOnChangePage);
+}
+
 export default function* dashboardSaga() {
-  yield all([watchDoingStepOne(), watchOnChangePage()]);
+  yield all([watchDoingStepOne(), watchOnChangePage(), watchOnDeleteRow()]);
 }

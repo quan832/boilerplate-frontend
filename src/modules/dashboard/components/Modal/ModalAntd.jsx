@@ -14,7 +14,7 @@ import moment from 'moment';
 import './ModalAntd.scss';
 import SelectInput from 'components/SelectInput/SelectInput';
 
-export default function ModalAntd({ isOpen, onCancel, type, data }) {
+export default function ModalAntd({ onSubmit, isOpen, onCancel, type, data }) {
   const handleSubmit = () => {
     console.log('submit');
   };
@@ -26,7 +26,8 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
     gender: '',
     datePositive: moment().format(FORMAT_DATE),
     dateOfBirth: moment().format(FORMAT_YEAR),
-    infectedFrom: ''
+    infectedFrom: '',
+    fromNote: ''
   };
 
   const [initialValues, setValues] = React.useState(initialValue);
@@ -36,8 +37,8 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
       const { dateOfBirth, gender, ...rest } = data;
       setValues({
         ...initialValues,
-        dateOfBirth: dateOfBirth ? dateOfBirth[0] : null,
-        gender: gender ? gender[0] : null,
+        dateOfBirth: dateOfBirth ? dateOfBirth : moment().format(FORMAT_YEAR),
+        gender: gender,
         ...rest
       });
     }
@@ -48,7 +49,12 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
   };
 
   return (
-    <Modal title="Basic Modal" visible={isOpen} onCancel={onCancel} width={800}>
+    <Modal
+      title="Basic Modal"
+      visible={isOpen}
+      onOk={() => onSubmit(initialValues)}
+      onCancel={onCancel}
+      width={800}>
       <Formik
         initialValues={{ name: '', date: moment(), clinic: '' }}
         onSubmit={async (values, { resetForm }) => {
@@ -95,7 +101,9 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
                     type="text"
                     value={initialValues.gender}
                     options={GENDER_OPTIONS}
-                    onChange={(value, option) => setValues({ ...initialValues, gender: value })}
+                    onChange={(value, option) =>
+                      setValues({ ...initialValues, gender: option.children })
+                    }
                     onBlur={handleBlur}
                     className={errors.gender && touched.gender ? 'text-input error' : 'text-input'}
                     disabled={type === typeModal.view ? true : false}
@@ -129,7 +137,9 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
                   type="text"
                   value={initialValues.clinic}
                   options={CLINIC_OPTIONS}
-                  onChange={(value, option) => setValues({ ...initialValues, clinic: value })}
+                  onChange={(value, option) =>
+                    setValues({ ...initialValues, clinic: option.children })
+                  }
                   onBlur={handleBlur}
                   className={errors.clinic && touched.clinic ? 'text-input error' : 'text-input'}
                   disabled={type === typeModal.view ? true : false}
@@ -163,9 +173,23 @@ export default function ModalAntd({ isOpen, onCancel, type, data }) {
                   disabled={type === typeModal.view ? true : false}
                 />
               </div>
-              {/* <div className="submit-button mlr-10">
-                <ExportDropdown />
-              </div> */}
+              {type !== typeModal.add ? (
+                <div className="w-100  mb-14">
+                  <p className="fw-bold mb-5">Thông tin điền từ biểu mẫu</p>
+                  <InputAntd
+                    id="fromNote"
+                    placeholder="Ghi chú từ biểu mẫu"
+                    type="text"
+                    value={initialValues.fromNote}
+                    // onChange={(e) => setValues({ ...initialValues, clinic: e.currentTarget.value })}
+                    // onBlur={handleBlur}
+                    className={
+                      errors.fromNote && touched.fromNote ? 'text-input error' : 'text-input'
+                    }
+                    disabled={true}
+                  />
+                </div>
+              ) : null}
             </form>
           );
         }}

@@ -1,0 +1,9 @@
+.process-two-container {
+    position: relative;
+    height: 100%;
+    .process-next {
+        position: absolute;
+        left: 5vh;
+        bottom: 8vh;
+    }
+}

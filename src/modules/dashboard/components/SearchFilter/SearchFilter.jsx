@@ -66,7 +66,7 @@ export default function SearchFilter() {
                   name="name"
                   placeholder="Searching by name,..."
                   type="text"
-                  value={values.name}
+                  value={initialValues.name}
                   onChange={(e) => setValues({ ...initialValues, name: e.currentTarget.value })}
                   onBlur={handleBlur}
                   className={errors.name && touched.name ? 'text-input error' : 'text-input'}
@@ -91,7 +91,7 @@ export default function SearchFilter() {
                   id="clinic"
                   placeholder="Searching by clinic"
                   type="text"
-                  value={values.name}
+                  value={initialValues.clinic}
                   onChange={(e) => setValues({ ...initialValues, clinic: e.currentTarget.value })}
                   onBlur={handleBlur}
                   className={errors.name && touched.name ? 'text-input error' : 'text-input'}

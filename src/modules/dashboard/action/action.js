@@ -17,6 +17,8 @@ export const FETCH_WHEN_CHANGE_PAGE = `${store}/FETCH_WHEN_CHANGE_PAGE`;
 export const TOGGLE_MODAL = `${store}/TOGGLE_MODAL`;
 export const CLOSE_MODAL = `${store}/CLOSE_MODAL`;
 
+export const EDIT_ROW_STAFF = `${store}/EDIT_ROW_STAFF`;
+export const DELETE_ROW_STAFF = `${store}/DELETE_ROW_STAFF`;
 
 export default class DashboardAction {
   static DOING_STEP_ONE = {
@@ -29,6 +31,20 @@ export default class DashboardAction {
     return {
       type: DOING_STEP_ONE,
       payload: { file, params }
+    };
+  }
+
+  static deleteRowStaff(id) {
+    return {
+      type: DELETE_ROW_STAFF,
+      payload: id
+    };
+  }
+
+  static editRow(value) {
+    return {
+      type: EDIT_ROW_STAFF,
+      payload: value
     };
   }
 

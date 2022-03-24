@@ -1,5 +1,13 @@
 import { FORMAT_DATE } from 'helper/constant';
-import DashboardAction, { CLOSE_MODAL, ON_CHANGE_PAGE, SEARCH_FILTER, TOGGLE_MODAL, UPDATE_PROCESS } from '../action/action';
+import DashboardAction, {
+  CLOSE_MODAL,
+  DELETE_ROW_STAFF,
+  EDIT_ROW_STAFF,
+  ON_CHANGE_PAGE,
+  SEARCH_FILTER,
+  TOGGLE_MODAL,
+  UPDATE_PROCESS
+} from '../action/action';
 import moment from 'moment'
 
 const statusProcess = {
@@ -12,6 +20,9 @@ const statusProcess = {
 const initialState = {
   currentStep: 0,
   loading: false,
+  upload: {
+    data: []
+  },
   modal: {
     isOpen: false,
     type: '',
@@ -29,12 +40,43 @@ const initialState = {
     filterDate: '',
     name: '',
     clinic: '',
-    status: statusProcess.wait
+    status: statusProcess.wait,
+    staffDelete: []
   }
 };
 
 const dashboardReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case DELETE_ROW_STAFF: {
+      return {
+        ...state,
+        upload: {
+          data: [...state.upload.data].filter((item) => item.id !== payload ? true : false)
+        },
+        stepTwo: {
+          ...state.stepTwo,
+          staffDelete: [...state.stepTwo.staffDelete, payload]
+        }
+      }
+    }
+    case EDIT_ROW_STAFF:
+      const uploadData = [...state.upload.data]
+      const dataDisplayed = [...state.stepTwo.data]
+      const indexFindStaff = uploadData.findIndex((item) => item.id === payload.id)
+      const indexInRow = dataDisplayed.findIndex((item) => item.id === payload.id)
+      uploadData[indexFindStaff] = payload
+      dataDisplayed[indexInRow] = payload
+      return {
+        ...state,
+        upload: {
+          ...state.upload,
+          data: uploadData
+        },
+        stepTwo: {
+          ...state.stepTwo,
+          data: dataDisplayed
+        }
+      }
     case CLOSE_MODAL:
       return {
         ...state,
@@ -99,6 +141,9 @@ const dashboardReducer = (state = initialState, { type, payload }) => {
           data: payload.result,
           total: payload.total,
           status: statusProcess.process,
+        },
+        upload: {
+          data: payload.readyUploadExcel
         }
       }
     case DashboardAction.DOING_STEP_ONE.ERROR:

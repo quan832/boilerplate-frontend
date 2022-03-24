@@ -5,6 +5,8 @@ import './TableAntd.scss';
 import { useDispatch } from 'react-redux';
 import DashboardAction from 'modules/dashboard/action/action';
 import { typeModal } from 'helper/constant';
+import { Popconfirm, message } from 'antd';
+import { capitalizeFirstLetter } from 'helper/serializers';
 
 function Header() {
   return (
@@ -22,6 +24,10 @@ export default function TableAntd({ data, page, onChangePage, total }) {
     dispatch(DashboardAction.toggleModal(type, value));
   };
 
+  const deleteRow = (id) => {
+    dispatch(DashboardAction.deleteRowStaff(id));
+  };
+
   const columns = [
     {
       title: 'Họ tên',
@@ -31,7 +37,10 @@ export default function TableAntd({ data, page, onChangePage, total }) {
     {
       title: 'Giới tính',
       dataIndex: 'gender',
-      width: 100
+      width: 100,
+      render: (value) => {
+        return <span>{value ? capitalizeFirstLetter(value, 'vi') : null}</span>;
+      }
     },
     {
       title: 'Năm sinh',
@@ -82,12 +91,16 @@ export default function TableAntd({ data, page, onChangePage, total }) {
               onClick={() => toggleModal(typeModal.edit, value)}>
               <i className="fas fa-edit" />
             </button>
-            <button
-              className="react-table-suspend-button"
-              // onClick={() => suspendClick(tableInstance.row.original)}
-            >
-              <i className="fas fa-user-alt-slash" />
-            </button>
+            <Popconfirm
+              title="Are you sure to delete this row?"
+              onConfirm={() => deleteRow(value.id)}
+              // onCancel={cancel}
+              okText="Yes"
+              cancelText="No">
+              <button className="react-table-suspend-button">
+                <i className="fas fa-user-alt-slash" />
+              </button>
+            </Popconfirm>
           </div>
         );
       }
@@ -106,7 +119,7 @@ export default function TableAntd({ data, page, onChangePage, total }) {
           // defaultCurrent: 1,
           total: total,
           defaultPageSize: 6,
-          position: 'bottom',
+          position: 'bottomCenter',
           onChange: (page) => onChangePage(page),
           current: page
           // pageSizeOptions: ['10', '20', '30']
