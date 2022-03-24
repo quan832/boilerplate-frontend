@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Modal } from 'antd';
 import { Formik } from 'formik';
-import { DatePickerAntd, InputAntd } from 'stylesheet/Input/Input.styled';
+import { DatePickerAntd, FormGroup, InputAntd } from 'stylesheet/Input/Input.styled';
 import { ButtonStyled } from 'stylesheet/Button/Button.styled';
-import { FORMAT_DATE } from 'helper/constant';
+import { CLINIC_OPTIONS, FORMAT_DATE, FORMAT_YEAR, GENDER_OPTIONS } from 'helper/constant';
 import moment from 'moment';
+import './ModalAntd.scss';
+import SelectInput from 'components/SelectInput/SelectInput';
 
 export default function ModalAntd({ isOpen, onCancel }) {
   const handleSubmit = () => {
@@ -14,7 +16,9 @@ export default function ModalAntd({ isOpen, onCancel }) {
   const initialValue = {
     name: '',
     date: moment(),
-    clinic: ''
+    clinic: '',
+    gender: '',
+    datePositive: moment().format(FORMAT_DATE)
   };
   const [initialValues, setValues] = React.useState(initialValue);
 
@@ -24,7 +28,7 @@ export default function ModalAntd({ isOpen, onCancel }) {
   };
 
   return (
-    <Modal title="Basic Modal" visible={isOpen} onCancel={onCancel}>
+    <Modal title="Basic Modal" visible={isOpen} onCancel={onCancel} width={800}>
       <Formik
         initialValues={{ name: '', date: moment(), clinic: '' }}
         onSubmit={async (values, { resetForm }) => {
@@ -47,50 +51,91 @@ export default function ModalAntd({ isOpen, onCancel }) {
             handleReset
           } = props;
           return (
-            <form onSubmit={handleSubmit}>
-              <div className="mt-10 mb-30 search-filter-container flex-x align-center mx-auto justify-center">
-                <div className="w-40 mr-20">
-                  <p className="fw-bold mb-5">What are you looking for?</p>
-                  <InputAntd
-                    id="name"
-                    name="name"
-                    placeholder="Searching by name,..."
+            <form onSubmit={handleSubmit} className="form-modal">
+              <div className="w-40 w-100 mb-14">
+                <p className="fw-bold mb-2">Họ tên</p>
+                <InputAntd
+                  id="name"
+                  name="name"
+                  placeholder="Điền thông tin họ tên nhân viên nhiễm COVID"
+                  type="text"
+                  value={initialValues.name}
+                  onChange={(e) => setValues({ ...initialValues, name: e.target.value })}
+                  onBlur={handleBlur}
+                  className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                />
+              </div>
+              <div className="flex-x align-center mb-14 w-100">
+                <div className="w-50 pr-15">
+                  <p className="fw-bold mb-5">Giới tính</p>
+                  <SelectInput
+                    id="gender"
+                    placeholder="Chọn giới tính"
                     type="text"
-                    value={values.name}
-                    onChange={(e) => setValues({ ...initialValues, name: e.currentTarget.value })}
+                    value={initialValues.gender}
+                    options={GENDER_OPTIONS}
+                    onChange={(value, option) => setValues({ ...initialValues, gender: value })}
                     onBlur={handleBlur}
-                    className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                    className={errors.gender && touched.gender ? 'text-input error' : 'text-input'}
                   />
                 </div>
-                <div className="w-20 mr-20">
-                  <p className="fw-bold mb-5">Date Searching</p>
+                <div className="w-50 ">
+                  <p className="fw-bold mb-5">Năm sinh</p>
                   <DatePickerAntd
                     id="date"
                     name="date"
                     type="date"
+                    picker="year"
+                    placeholder="Chọn năm sinh"
                     onChange={(date, dateString) => onSetDate(dateString)}
                     onBlur={handleBlur}
                     className={errors.date && touched.date ? 'text-input error' : 'text-input'}
-                    format={FORMAT_DATE}
-                    defaultValue={moment(defaultDate, FORMAT_DATE)}
+                    format={FORMAT_YEAR}
+                    // defaultValue={moment(defaultDate, FORMAT_DATE)}
                   />
                 </div>
-                <div className="w-20 mr-20">
-                  <p className="fw-bold mb-5">Clinic Searching</p>
-                  <InputAntd
-                    id="clinic"
-                    placeholder="Searching by clinic"
-                    type="text"
-                    value={values.name}
-                    onChange={(e) => setValues({ ...initialValues, clinic: e.currentTarget.value })}
-                    onBlur={handleBlur}
-                    className={errors.name && touched.name ? 'text-input error' : 'text-input'}
-                  />
-                </div>
-                {/* <div className="submit-button mlr-10">
+              </div>
+              <div className="w-100  mb-14">
+                <p className="fw-bold mb-5">Khoa/ phòng</p>
+                <SelectInput
+                  id="clinic"
+                  placeholder="Chọn khoa/ phòng"
+                  type="text"
+                  value={initialValues.clinic}
+                  options={CLINIC_OPTIONS}
+                  onChange={(value, option) => setValues({ ...initialValues, clinic: value })}
+                  onBlur={handleBlur}
+                  className={errors.clinic && touched.clinic ? 'text-input error' : 'text-input'}
+                />
+              </div>
+              <div className="w-100  mb-14">
+                <p className="fw-bold mb-5">Ngày XN dương tính </p>
+                <InputAntd
+                  id="datePositive"
+                  placeholder="Ngày xác nhận dương tính"
+                  type="text"
+                  value={initialValues.datePositive}
+                  // onChange={(e) => setValues({ ...initialValues, clinic: e.currentTarget.value })}
+                  onBlur={handleBlur}
+                  className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                  disabled={true}
+                />
+              </div>
+              <div className="w-100  mb-14">
+                <p className="fw-bold mb-5">Nguồn nghi nhiễm</p>
+                <InputAntd
+                  id="infectedFrom"
+                  placeholder="Điền thông tin nguồn nghi nhiễm"
+                  type="text"
+                  value={initialValues.infectedFrom}
+                  onChange={(e) => setValues({ ...initialValues, infectedFrom: e.target.value })}
+                  onBlur={handleBlur}
+                  className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                />
+              </div>
+              {/* <div className="submit-button mlr-10">
                 <ExportDropdown />
               </div> */}
-              </div>
             </form>
           );
         }}

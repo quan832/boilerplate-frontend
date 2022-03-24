@@ -1,5 +1,8 @@
 import { DatePicker, Input } from 'antd';
 import styled, { css } from 'styled-components';
+import { Select } from 'antd';
+
+const { Option } = Select;
 
 const { TextArea } = Input;
 
@@ -22,13 +25,17 @@ export const LabelStyled = styled.label`
     `}
 `;
 export const SelectInputStyled = styled.div`
+.ant-select-selection-search,.ant-select-selection-placeholder{
+  display:flex!important;
+  align-items: center;
+}
   .ant-select {
     border: 0.0625rem solid #dfe3e9 !important;
-    border-radius: 0.1875rem !important;
+    border-radius: 8px !important;
     background-color: #fff !important;
     display: block !important;
     font-size: 1rem !important;
-    height: 40px !important;
+    height: 48px !important;
     padding: 0 0.5rem !important;
     transition: border-color 0.2s ease-in-out !important;
     width: 100% !important;

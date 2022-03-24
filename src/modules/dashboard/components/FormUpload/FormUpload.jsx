@@ -2,7 +2,6 @@ import React from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import DropUpload from '../DropUpload/DropUpload';
-
 export default function FormUpload({ id }) {
   return (
     <form id={id}>

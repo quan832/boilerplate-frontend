@@ -1,0 +1,11 @@
+.ant-modal-body {
+    display: flex;
+    justify-content: center;
+    .form-modal {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
