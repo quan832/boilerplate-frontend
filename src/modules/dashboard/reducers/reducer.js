@@ -2,7 +2,6 @@ import { FORMAT_DATE } from 'helper/constant';
 import DashboardAction, { CLOSE_MODAL, ON_CHANGE_PAGE, SEARCH_FILTER, TOGGLE_MODAL, UPDATE_PROCESS } from '../action/action';
 import moment from 'moment'
 
-
 const statusProcess = {
   wait: 'wait',
   process: 'process',
@@ -15,7 +14,8 @@ const initialState = {
   loading: false,
   modal: {
     isOpen: false,
-    type: ''
+    type: '',
+    value: null
   },
   stepOne: {
     file: null,
@@ -41,7 +41,8 @@ const dashboardReducer = (state = initialState, { type, payload }) => {
         modal: {
           ...state.modal,
           isOpen: false,
-          type: ''
+          type: '',
+          value: null,
         }
       }
     case TOGGLE_MODAL:
@@ -50,7 +51,8 @@ const dashboardReducer = (state = initialState, { type, payload }) => {
         modal: {
           ...state.modal,
           isOpen: !state.modal.isOpen,
-          type: payload
+          type: payload.type,
+          value: payload.value
         }
       }
     case SEARCH_FILTER:

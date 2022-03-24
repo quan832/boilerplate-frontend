@@ -4,6 +4,7 @@ import ExportDropdown from '../ExportDropdown/ExportDropdown';
 import './TableAntd.scss';
 import { useDispatch } from 'react-redux';
 import DashboardAction from 'modules/dashboard/action/action';
+import { typeModal } from 'helper/constant';
 
 function Header() {
   return (
@@ -17,8 +18,8 @@ function Header() {
 export default function TableAntd({ data, page, onChangePage, total }) {
   const dispatch = useDispatch();
 
-  const toggleModal = (type) => {
-    dispatch(DashboardAction.toggleModal(type));
+  const toggleModal = (type, value) => {
+    dispatch(DashboardAction.toggleModal(type, value));
   };
 
   const columns = [
@@ -68,13 +69,17 @@ export default function TableAntd({ data, page, onChangePage, total }) {
     {
       title: 'Action',
       width: 200,
-      render: () => {
+      render: (value) => {
         return (
           <div className="react-action-class wide-cell">
-            <button className="react-table-view-button" onClick={() => toggleModal('view')}>
+            <button
+              className="react-table-view-button"
+              onClick={() => toggleModal(typeModal.view, value)}>
               <i className="fas fa-eye" />
             </button>
-            <button className="react-table-edit-button" onClick={() => toggleModal('edit')}>
+            <button
+              className="react-table-edit-button"
+              onClick={() => toggleModal(typeModal.edit, value)}>
               <i className="fas fa-edit" />
             </button>
             <button

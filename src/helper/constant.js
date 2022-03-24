@@ -4,6 +4,12 @@ export const GENDER_OPTIONS = [
     { id: 1, value: 'Nam' },
     { id: 2, value: 'Nữ' }
 ]
+export const typeModal = {
+    add: 'add',
+    edit: 'edit',
+    view: 'view'
+}
+
 const field = [
     {
         inputField: "BGĐ",

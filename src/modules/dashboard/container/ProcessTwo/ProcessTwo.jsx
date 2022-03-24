@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 export default function ProcessTwo() {
   const { data, total, page } = useSelector((state) => state.dashboard.stepTwo);
   const { file } = useSelector((state) => state.dashboard.stepOne);
-  const { isOpen, type } = useSelector((state) => state.dashboard.modal);
+  const { isOpen, type, value } = useSelector((state) => state.dashboard.modal);
 
   const dispatch = useDispatch();
   const onChangePage = (page) => {
@@ -18,14 +18,14 @@ export default function ProcessTwo() {
   };
 
   const onCancelModal = () => {
-    if (isOpen) dispatch(DashboardAction.toggleModal(''));
+    if (isOpen) dispatch(DashboardAction.cancelModal());
   };
 
   return (
     <div className="pt-40 plr-40">
       <SearchFilter />
       <TableAntd data={data} onChangePage={onChangePage} total={total} page={page} />
-      <ModalAntd isOpen={isOpen} onCancel={onCancelModal} />
+      <ModalAntd isOpen={isOpen} onCancel={onCancelModal} data={value} type={type} />
     </div>
   );
 }

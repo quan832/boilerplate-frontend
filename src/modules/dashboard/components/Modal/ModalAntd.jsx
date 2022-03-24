@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal } from 'antd';
 import { Formik } from 'formik';
 import { DatePickerAntd, FormGroup, InputAntd } from 'stylesheet/Input/Input.styled';
 import { ButtonStyled } from 'stylesheet/Button/Button.styled';
-import { CLINIC_OPTIONS, FORMAT_DATE, FORMAT_YEAR, GENDER_OPTIONS } from 'helper/constant';
+import {
+  CLINIC_OPTIONS,
+  FORMAT_DATE,
+  FORMAT_YEAR,
+  GENDER_OPTIONS,
+  typeModal
+} from 'helper/constant';
 import moment from 'moment';
 import './ModalAntd.scss';
 import SelectInput from 'components/SelectInput/SelectInput';
 
-export default function ModalAntd({ isOpen, onCancel }) {
+export default function ModalAntd({ isOpen, onCancel, type, data }) {
   const handleSubmit = () => {
     console.log('submit');
   };
@@ -18,13 +24,27 @@ export default function ModalAntd({ isOpen, onCancel }) {
     date: moment(),
     clinic: '',
     gender: '',
-    datePositive: moment().format(FORMAT_DATE)
+    datePositive: moment().format(FORMAT_DATE),
+    dateOfBirth: moment().format(FORMAT_YEAR),
+    infectedFrom: ''
   };
+
   const [initialValues, setValues] = React.useState(initialValue);
 
-  let defaultDate = moment().format(FORMAT_DATE);
-  const onSetDate = (value, index) => {
-    setValues({ ...initialValues, date: value });
+  useEffect(() => {
+    if (type === typeModal.edit || (type === typeModal.view && data)) {
+      const { dateOfBirth, gender, ...rest } = data;
+      setValues({
+        ...initialValues,
+        dateOfBirth: dateOfBirth ? dateOfBirth[0] : null,
+        gender: gender ? gender[0] : null,
+        ...rest
+      });
+    }
+  }, [data]);
+
+  const onSetDateOfBirth = (value, index) => {
+    setValues({ ...initialValues, dateOfBirth: value });
   };
 
   return (
@@ -63,6 +83,7 @@ export default function ModalAntd({ isOpen, onCancel }) {
                   onChange={(e) => setValues({ ...initialValues, name: e.target.value })}
                   onBlur={handleBlur}
                   className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                  disabled={type === typeModal.view ? true : false}
                 />
               </div>
               <div className="flex-x align-center mb-14 w-100">
@@ -77,21 +98,26 @@ export default function ModalAntd({ isOpen, onCancel }) {
                     onChange={(value, option) => setValues({ ...initialValues, gender: value })}
                     onBlur={handleBlur}
                     className={errors.gender && touched.gender ? 'text-input error' : 'text-input'}
+                    disabled={type === typeModal.view ? true : false}
                   />
                 </div>
                 <div className="w-50 ">
                   <p className="fw-bold mb-5">Năm sinh</p>
                   <DatePickerAntd
-                    id="date"
-                    name="date"
+                    id="dateOfBirth"
+                    name="dateOfBirth"
                     type="date"
                     picker="year"
                     placeholder="Chọn năm sinh"
-                    onChange={(date, dateString) => onSetDate(dateString)}
+                    onChange={(date, dateString) => onSetDateOfBirth(dateString)}
                     onBlur={handleBlur}
-                    className={errors.date && touched.date ? 'text-input error' : 'text-input'}
+                    value={moment(initialValues.dateOfBirth, FORMAT_YEAR)}
+                    className={
+                      errors.dateOfBirth && touched.dateOfBirth ? 'text-input error' : 'text-input'
+                    }
                     format={FORMAT_YEAR}
-                    // defaultValue={moment(defaultDate, FORMAT_DATE)}
+                    disabled={type === typeModal.view ? true : false}
+                    // defaultValue={moment(defaultDate, FOR)}
                   />
                 </div>
               </div>
@@ -106,6 +132,7 @@ export default function ModalAntd({ isOpen, onCancel }) {
                   onChange={(value, option) => setValues({ ...initialValues, clinic: value })}
                   onBlur={handleBlur}
                   className={errors.clinic && touched.clinic ? 'text-input error' : 'text-input'}
+                  disabled={type === typeModal.view ? true : false}
                 />
               </div>
               <div className="w-100  mb-14">
@@ -116,8 +143,10 @@ export default function ModalAntd({ isOpen, onCancel }) {
                   type="text"
                   value={initialValues.datePositive}
                   // onChange={(e) => setValues({ ...initialValues, clinic: e.currentTarget.value })}
-                  onBlur={handleBlur}
-                  className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                  // onBlur={handleBlur}
+                  className={
+                    errors.datePositive && touched.datePositive ? 'text-input error' : 'text-input'
+                  }
                   disabled={true}
                 />
               </div>
@@ -131,6 +160,7 @@ export default function ModalAntd({ isOpen, onCancel }) {
                   onChange={(e) => setValues({ ...initialValues, infectedFrom: e.target.value })}
                   onBlur={handleBlur}
                   className={errors.name && touched.name ? 'text-input error' : 'text-input'}
+                  disabled={type === typeModal.view ? true : false}
                 />
               </div>
               {/* <div className="submit-button mlr-10">

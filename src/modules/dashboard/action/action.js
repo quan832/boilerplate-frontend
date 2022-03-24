@@ -32,10 +32,10 @@ export default class DashboardAction {
     };
   }
 
-  static toggleModal(type) {
+  static toggleModal(type, value) {
     return {
       type: TOGGLE_MODAL,
-      payload: type
+      payload: { type, value }
     };
   }
 

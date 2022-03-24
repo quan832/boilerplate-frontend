@@ -23,7 +23,8 @@ export default function SelectInput({
   disabled,
   onBlur,
   onChange,
-  placeholder
+  placeholder,
+  value
 }) {
   const renderOptions = options.map((child, index) => (
     <Option key={index} value={child.id}>
@@ -39,7 +40,9 @@ export default function SelectInput({
         style={SelectStyle}
         optionFilterProp="children"
         onChange={onChange}
-        onBlur={onBlur}>
+        onBlur={onBlur}
+        value={value}
+        disabled={disabled}>
         {renderOptions}
       </Select>
     </SelectInputStyled>
