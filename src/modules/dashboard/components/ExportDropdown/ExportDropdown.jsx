@@ -8,13 +8,14 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-export default function ExportDropdown() {
+export default function ExportDropdown({ onClick }) {
   return (
     <Dropdown.Button
+      on
       icon={<DownOutlined />}
       //   loading={loadings[1]}
       overlay={menu}
-      onClick={() => this.enterLoading(1)}>
+      onClick={onClick}>
       <i className="fa-solid fa-file-export"></i>
     </Dropdown.Button>
   );

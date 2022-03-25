@@ -6,7 +6,9 @@
   "dependencies": {
     "antd": "^4.19.3",
     "axios": "^0.26.1",
+    "file-saver": "^2.0.5",
     "formik": "^2.2.9",
+    "jszip": "^3.7.1",
     "moment": "^2.29.1",
     "qs": "^6.10.3",
     "react": "^17.0.2",

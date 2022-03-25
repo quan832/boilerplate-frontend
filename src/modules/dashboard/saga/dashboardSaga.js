@@ -1,10 +1,10 @@
-import DashboardAction, { DELETE_ROW_STAFF, DOING_STEP_ONE, FETCH_WHEN_CHANGE_PAGE, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
+import DashboardAction, { DELETE_ROW_STAFF, DOING_STEP_ONE, DOWNLOAD_EXCEL, FETCH_WHEN_CHANGE_PAGE, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
 import { all, call, fork, put, select, takeLatest } from '@redux-saga/core/effects';
 import { errorNotification, getError, successNotification } from 'helper/notification';
-import { doingProcessOne } from '../api/dashboard';
+import { doingProcessOne, downloadExcelInProcessOne } from '../api/dashboard';
 import moment from 'moment'
 import { FORMAT_DATE } from 'helper/constant';
-
+import JSZip from 'jszip'
 export const getCurrentStep = (state) => state.dashboard.currentStep;
 export const getCurrentFile = (state) => state.dashboard.stepOne.file;
 export const getParamsStepTwo = (state) => state.dashboard.stepTwo;
@@ -53,6 +53,26 @@ function* shouldFetchOnChangePage() {
   }
 }
 
+
+
+function* downloadExcel({ payload }) {
+  try {
+    yield put({ type: DashboardAction.DOWNLOAD_EXCEL.REQUEST });
+    const data = yield call(downloadExcelInProcessOne, payload);
+
+    yield put({ type: DashboardAction.DOWNLOAD_EXCEL.SUCCESS, payload: data });
+
+    successNotification('Download success');
+  } catch (error) {
+    errorNotification(getError(error));
+    yield put({
+      type: DashboardAction.DOWNLOAD_EXCEL.ERROR,
+      payload: getError(error)
+    });
+  }
+}
+
+
 function* watchOnChangePage() {
   yield takeLatest(FETCH_WHEN_CHANGE_PAGE, shouldFetchOnChangePage);
 }
@@ -61,6 +81,10 @@ function* watchOnDeleteRow() {
   yield takeLatest(DELETE_ROW_STAFF, shouldFetchOnChangePage);
 }
 
+function* watchDownloadExcel() {
+  yield takeLatest(DOWNLOAD_EXCEL, downloadExcel);
+}
+
 export default function* dashboardSaga() {
-  yield all([watchDoingStepOne(), watchOnChangePage(), watchOnDeleteRow()]);
+  yield all([watchDoingStepOne(), watchOnChangePage(), watchOnDeleteRow(), watchDownloadExcel()]);
 }

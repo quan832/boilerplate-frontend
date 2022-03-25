@@ -22,7 +22,6 @@ export default function ProcessOne() {
     newFiles.splice(newFiles.indexOf(fileRemove), 1);
     setFile(newFiles);
   };
-  const { file: fileRedux } = useSelector((state) => state.dashboard.stepOne);
 
   const params = {
     name: '',

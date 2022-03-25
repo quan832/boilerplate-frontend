@@ -9,6 +9,11 @@ export const DOING_STEP_ONE_REQUEST = `${store}/DOING_STEP_ONE_REQUEST`;
 export const DOING_STEP_ONE_SUCCESS = `${store}/DOING_STEP_ONE_SUCCESS`;
 export const DOING_STEP_ONE_ERROR = `${store}/DOING_STEP_ONE_ERROR`;
 
+export const DOWNLOAD_EXCEL = `${store}/DOWNLOAD_EXCEL`;
+export const DOWNLOAD_EXCEL_REQUEST = `${store}/DOWNLOAD_EXCEL_REQUEST`;
+export const DOWNLOAD_EXCEL_SUCCESS = `${store}/DOWNLOAD_EXCEL_SUCCESS`;
+export const DOWNLOAD_EXCEL_ERROR = `${store}/DOWNLOAD_EXCEL_ERROR`;
+
 export const SEARCH_FILTER = `${store}/SEARCH_FILTER`;
 
 export const ON_CHANGE_PAGE = `${store}/ON_CHANGE_PAGE`;
@@ -27,10 +32,23 @@ export default class DashboardAction {
     ERROR: DOING_STEP_ONE_ERROR
   };
 
+  static DOWNLOAD_EXCEL = {
+    REQUEST: DOWNLOAD_EXCEL_REQUEST,
+    SUCCESS: DOWNLOAD_EXCEL_SUCCESS,
+    ERROR: DOWNLOAD_EXCEL_ERROR
+  };
+
   static doingStepOne(file, params) {
     return {
       type: DOING_STEP_ONE,
       payload: { file, params }
+    };
+  }
+
+  static downloadExcel(data) {
+    return {
+      type: DOWNLOAD_EXCEL,
+      payload: data
     };
   }
 

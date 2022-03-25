@@ -14,6 +14,7 @@ export default function ProcessTwo() {
   const { data, total, page } = useSelector((state) => state.dashboard.stepTwo);
   const { file } = useSelector((state) => state.dashboard.stepOne);
   const { isOpen, type, value } = useSelector((state) => state.dashboard.modal);
+  const { data: uploadExcel } = useSelector((state) => state.dashboard.upload)
 
   const dispatch = useDispatch();
   const onChangePage = (page) => {
@@ -42,10 +43,14 @@ export default function ProcessTwo() {
     dispatch(DashboardAction.updateProcess(currentStep - 1));
   };
 
+  const downloadExcel = (data) => {
+    dispatch(DashboardAction.downloadExcel(data))
+  }
+
   return (
     <div className="pt-40 plr-40 process-two-container">
       <SearchFilter />
-      <TableAntd data={data} onChangePage={onChangePage} total={total} page={page} />
+      <TableAntd data={data} onChangePage={onChangePage} total={total} page={page} downloadExcel={() => downloadExcel(uploadExcel)} />
       <div className="process-next flex-x align-center">
         <ButtonStyled small onClick={onPrev} primary className="mr-15">
           Previous

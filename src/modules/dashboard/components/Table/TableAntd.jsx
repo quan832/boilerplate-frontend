@@ -8,16 +8,9 @@ import { typeModal } from 'helper/constant';
 import { Popconfirm, message } from 'antd';
 import { capitalizeFirstLetter } from 'helper/serializers';
 
-function Header() {
-  return (
-    <div className="flex-x align-center space-between">
-      <span className="fw-bold">Header</span>
-      <ExportDropdown />
-    </div>
-  );
-}
 
-export default function TableAntd({ data, page, onChangePage, total }) {
+
+export default function TableAntd({ data, page, onChangePage, total, downloadExcel }) {
   const dispatch = useDispatch();
 
   const toggleModal = (type, value) => {
@@ -27,6 +20,15 @@ export default function TableAntd({ data, page, onChangePage, total }) {
   const deleteRow = (id) => {
     dispatch(DashboardAction.deleteRowStaff(id));
   };
+
+  function Header() {
+    return (
+      <div className="flex-x align-center space-between">
+        <span className="fw-bold">Header</span>
+        <ExportDropdown onClick={downloadExcel} />
+      </div>
+    );
+  }
 
   const columns = [
     {

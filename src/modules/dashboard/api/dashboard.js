@@ -2,11 +2,12 @@ import { handleError, handleResponse } from 'apis/apiUtil';
 import qs from 'qs'
 const axios = require('axios');
 const rootURL = process.env.API_ENDPOINT;
+import JSZip from 'jszip'
+import { saveAs } from 'file-saver';
 
 export function doingProcessOne(data, params) {
   const formData = new FormData();
   formData.append('formFile', data);
-  console.log(params)
   return axios({
     method: 'post',
     url: rootURL + '/processOne',
@@ -31,5 +32,21 @@ export function doingProcessThree(data) {
     headers: { 'Content-Type': 'multipart/form-data' }
   })
     .then(handleResponse)
+    .catch(handleError);
+}
+
+
+export function downloadExcelInProcessOne(data) {
+  return axios({
+    method: 'post',
+    url: rootURL + '/renderExcel',
+    data: data,
+    headers: { 'Content-Type': 'application/json' },
+    responseType: 'blob',
+  })
+    .then(async (response) => {
+      const data = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+      saveAs(data, 'result' + '.xlsx');
+    })
     .catch(handleError);
 }
