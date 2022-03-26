@@ -42,11 +42,26 @@ const initialState = {
     clinic: '',
     status: statusProcess.wait,
     staffDelete: []
+  },
+  stepThree: {
+    maxRange: 10,
+    chart: []
   }
 };
 
 const dashboardReducer = (state = initialState, { type, payload }) => {
   switch (type) {
+    case DashboardAction.GET_CHART_DATA.SUCCESS:
+      const count = [...payload].map((item) => item.count)
+      const max = Math.max(...count);
+      return {
+        ...state,
+        stepThree: {
+          ...state.stepThree,
+          maxRange: max,
+          chart: payload
+        }
+      }
     case DELETE_ROW_STAFF: {
       return {
         ...state,

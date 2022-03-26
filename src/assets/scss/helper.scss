@@ -106,6 +106,9 @@
   .vh-#{$i} {
     height: $i * 1vh !important;
   }
+  // .h-#{$i} {
+  //   height: $i * 1% !important;
+  // }
   .w-#{$i} {
     width: $i * 1% !important;
   }

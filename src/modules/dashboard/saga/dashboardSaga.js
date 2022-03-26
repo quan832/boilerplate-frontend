@@ -1,7 +1,7 @@
-import DashboardAction, { DELETE_ROW_STAFF, DOING_STEP_ONE, DOWNLOAD_EXCEL, FETCH_WHEN_CHANGE_PAGE, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
+import DashboardAction, { DELETE_ROW_STAFF, DOING_STEP_ONE, DOWNLOAD_EXCEL, DOWNLOAD_EXCEL_PROCESS_THREE, FETCH_WHEN_CHANGE_PAGE, GET_CHART_DATA, IMPORT_EXCEL_DOWNLOAD, ON_CHANGE_PAGE, UPDATE_PROCESS } from '../action/action';
 import { all, call, fork, put, select, takeLatest } from '@redux-saga/core/effects';
 import { errorNotification, getError, successNotification } from 'helper/notification';
-import { doingProcessOne, downloadExcelInProcessOne } from '../api/dashboard';
+import { doingProcessOne, downloadExcelInProcessOne, downloadExcelInProcessThree, getChartDataAPI, importExcelAndDownloadAPI } from '../api/dashboard';
 import moment from 'moment'
 import { FORMAT_DATE } from 'helper/constant';
 import JSZip from 'jszip'
@@ -58,6 +58,7 @@ function* shouldFetchOnChangePage() {
 function* downloadExcel({ payload }) {
   try {
     yield put({ type: DashboardAction.DOWNLOAD_EXCEL.REQUEST });
+    console.log(payload)
     const data = yield call(downloadExcelInProcessOne, payload);
 
     yield put({ type: DashboardAction.DOWNLOAD_EXCEL.SUCCESS, payload: data });
@@ -72,6 +73,60 @@ function* downloadExcel({ payload }) {
   }
 }
 
+function* downloadExcelProcessThree({ payload }) {
+  try {
+    yield put({ type: DashboardAction.DOWNLOAD_EXCEL_PROCESS_THREE.REQUEST });
+    console.log(payload)
+    const data = yield call(downloadExcelInProcessThree, payload);
+
+    yield put({ type: DashboardAction.DOWNLOAD_EXCEL_PROCESS_THREE.SUCCESS, payload: data });
+
+    successNotification('Download success');
+  } catch (error) {
+    errorNotification(getError(error));
+    yield put({
+      type: DashboardAction.DOWNLOAD_EXCEL_PROCESS_THREE.ERROR,
+      payload: getError(error)
+    });
+  }
+}
+
+
+function* getChartData({ payload }) {
+  try {
+    yield put({ type: DashboardAction.GET_CHART_DATA.REQUEST });
+    const data = yield call(getChartDataAPI, payload.data, payload.params);
+
+    yield put({ type: DashboardAction.GET_CHART_DATA.SUCCESS, payload: data });
+  } catch (error) {
+    errorNotification(getError(error));
+    yield put({
+      type: DashboardAction.GET_CHART_DATA.ERROR,
+      payload: getError(error)
+    });
+  }
+}
+
+function* importExcelDownload({ payload }) {
+  try {
+    // yield put({ type: DashboardAction.DOWNLOAD_EXCEL.REQUEST });
+    // console.log(payload)
+    const data = yield call(importExcelAndDownloadAPI, payload[0]);
+
+    // yield put({ type: DashboardAction.DOWNLOAD_EXCEL.SUCCESS, payload: data });
+
+    successNotification('Download success');
+  } catch (error) {
+    errorNotification(getError(error));
+    // yield put({
+    //   type: DashboardAction.DOWNLOAD_EXCEL.ERROR,
+    //   payload: getError(error)
+    // });
+  }
+}
+
+
+
 
 function* watchOnChangePage() {
   yield takeLatest(FETCH_WHEN_CHANGE_PAGE, shouldFetchOnChangePage);
@@ -85,6 +140,27 @@ function* watchDownloadExcel() {
   yield takeLatest(DOWNLOAD_EXCEL, downloadExcel);
 }
 
+function* watchDownloadExcelProcessThree() {
+  yield takeLatest(DOWNLOAD_EXCEL_PROCESS_THREE, downloadExcelProcessThree);
+}
+
+function* watchGetChartData() {
+  yield takeLatest(GET_CHART_DATA, getChartData);
+}
+
+function* watchImportExcel() {
+  yield takeLatest(IMPORT_EXCEL_DOWNLOAD, importExcelDownload);
+}
+
 export default function* dashboardSaga() {
-  yield all([watchDoingStepOne(), watchOnChangePage(), watchOnDeleteRow(), watchDownloadExcel()]);
+  yield all([
+    watchDoingStepOne(),
+    watchOnChangePage(),
+    watchOnDeleteRow(),
+    watchDownloadExcel(),
+    watchGetChartData(),
+    watchImportExcel(),
+    watchDownloadExcelProcessThree()
+  ]
+  );
 }

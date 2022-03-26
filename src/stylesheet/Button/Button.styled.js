@@ -46,6 +46,8 @@ export const ButtonStyled = styled.button`
           }
         `}
 
+       
+
     ${(props) => props.marginRight && css``}
 
        ${(props) =>
@@ -60,8 +62,8 @@ export const ButtonStyled = styled.button`
            ${(props) =>
     props.disabled &&
     css`
-               background-color: #cccccc;
-               color: #666666;
+               background-color: #cccccc!important;
+               color: #666666!important;
                cursor: not-allowed !important;
              `}
 
@@ -77,4 +79,10 @@ export const ButtonStyled = styled.button`
         background-color: #2f2a66;
       }
     `}
+
+         ${(props) =>
+    props.w100 &&
+    css`
+          width:100%!important
+        `}
 `;

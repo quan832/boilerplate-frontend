@@ -24,7 +24,7 @@ export default function StepProcess() {
       current={currentStep}
       onChange={onChange}
       className="site-navigation-steps">
-      <Step status={statusOne} title="Step 1" />
+      <Step status={statusOne} title="Step 1" disabled={statusOne === 'finish' ? true : false} />
       {/* <Step status="process" title="Step 2" /> */}
       <Step status={statusTwo} title="Step 2" disabled={!file?.path ? true : false} />
       <Step status="wait" title="Step 3" />

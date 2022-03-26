@@ -103,6 +103,7 @@ module.exports = (env, agrv) => {
         pages: path.resolve(__dirname, './src/pages/'),
         helper: path.resolve(__dirname, './src/helper'),
         hooks: path.resolve(__dirname, './src/hooks'),
+        lib: path.resolve(__dirname, './src/lib'),
         template: path.resolve(__dirname, './src/template/')
       }
     },

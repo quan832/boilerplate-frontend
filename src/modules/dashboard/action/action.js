@@ -14,6 +14,16 @@ export const DOWNLOAD_EXCEL_REQUEST = `${store}/DOWNLOAD_EXCEL_REQUEST`;
 export const DOWNLOAD_EXCEL_SUCCESS = `${store}/DOWNLOAD_EXCEL_SUCCESS`;
 export const DOWNLOAD_EXCEL_ERROR = `${store}/DOWNLOAD_EXCEL_ERROR`;
 
+export const DOWNLOAD_EXCEL_PROCESS_THREE = `${store}/DOWNLOAD_EXCEL_PROCESS_THREE`;
+export const DOWNLOAD_EXCEL_PROCESS_THREE_REQUEST = `${store}/DOWNLOAD_EXCEL_PROCESS_THREE_REQUEST`;
+export const DOWNLOAD_EXCEL_PROCESS_THREE_SUCCESS = `${store}/DOWNLOAD_EXCEL_PROCESS_THREE_SUCCESS`;
+export const DOWNLOAD_EXCEL_PROCESS_THREE_ERROR = `${store}/DOWNLOAD_EXCEL_PROCESS_THREE_ERROR`;
+
+export const GET_CHART_DATA = `${store}/GET_CHART_DATA`;
+export const GET_CHART_DATA_REQUEST = `${store}/GET_CHART_DATA_REQUEST`;
+export const GET_CHART_DATA_SUCCESS = `${store}/GET_CHART_DATA_SUCCESS`;
+export const GET_CHART_DATA_ERROR = `${store}/GET_CHART_DATA_ERROR`;
+
 export const SEARCH_FILTER = `${store}/SEARCH_FILTER`;
 
 export const ON_CHANGE_PAGE = `${store}/ON_CHANGE_PAGE`;
@@ -24,6 +34,8 @@ export const CLOSE_MODAL = `${store}/CLOSE_MODAL`;
 
 export const EDIT_ROW_STAFF = `${store}/EDIT_ROW_STAFF`;
 export const DELETE_ROW_STAFF = `${store}/DELETE_ROW_STAFF`;
+
+export const IMPORT_EXCEL_DOWNLOAD = `${store}/IMPORT_EXCEL_DOWNLOAD`
 
 export default class DashboardAction {
   static DOING_STEP_ONE = {
@@ -38,6 +50,25 @@ export default class DashboardAction {
     ERROR: DOWNLOAD_EXCEL_ERROR
   };
 
+  static DOWNLOAD_EXCEL_PROCESS_THREE = {
+    REQUEST: DOWNLOAD_EXCEL_PROCESS_THREE_REQUEST,
+    SUCCESS: DOWNLOAD_EXCEL_PROCESS_THREE_SUCCESS,
+    ERROR: DOWNLOAD_EXCEL_PROCESS_THREE_ERROR
+  };
+
+  static GET_CHART_DATA = {
+    REQUEST: GET_CHART_DATA_REQUEST,
+    SUCCESS: GET_CHART_DATA_SUCCESS,
+    ERROR: GET_CHART_DATA_ERROR
+  };
+
+  static importExcelAndDownload(data) {
+    return {
+      type: IMPORT_EXCEL_DOWNLOAD,
+      payload: data
+    };
+  }
+
   static doingStepOne(file, params) {
     return {
       type: DOING_STEP_ONE,
@@ -45,10 +76,24 @@ export default class DashboardAction {
     };
   }
 
+  static downloadExcelProcessThree(data) {
+    return {
+      type: DOWNLOAD_EXCEL_PROCESS_THREE,
+      payload: data
+    };
+  }
+
   static downloadExcel(data) {
     return {
       type: DOWNLOAD_EXCEL,
       payload: data
+    };
+  }
+
+  static getChartData(data, params) {
+    return {
+      type: GET_CHART_DATA,
+      payload: { data, params }
     };
   }
 
